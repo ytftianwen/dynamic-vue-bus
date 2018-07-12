@@ -1,0 +1,23 @@
+{
+  "name": "dynamic-vue-bus",
+  "version": "1.0.0",
+  "description": "eventBus with lifecycle in Vue ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ytftianwen/dynamic-vue-bus.git"
+  },
+  "keywords": [
+    "Vue",
+    "EventBus"
+  ],
+  "author": "Yeyusen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ytftianwen/dynamic-vue-bus/issues"
+  },
+  "homepage": "https://github.com/ytftianwen/dynamic-vue-bus#readme"
+}
