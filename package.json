@@ -1,6 +1,6 @@
 {
   "name": "dynamic-vue-bus",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "eventBus with lifecycle in Vue ",
   "main": "index.js",
   "scripts": {
