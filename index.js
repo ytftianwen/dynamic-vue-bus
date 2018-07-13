@@ -1,54 +1,50 @@
-
+const handleSymbol = Symbol('handleSymbol')
+const eventsMap = Symbol('eventsMap')
 class EventBus {
   constructor (vue) {
-    if (!this.handles) {
-      Object.defineProperty(this, 'handles', {
+    if (!this[handleSymbol]) {
+      Object.defineProperty(this, handleSymbol, {
         value: {},
         enumerable: false
       })
     }
     this.Vue = vue
-    this.eventMapUid = {}
+    this[eventsMap] = {}
   }
-  setEventMapUid (uid, eventName) {
-    if (!this.eventMapUid[uid]) this.eventMapUid[uid] = []
-    this.eventMapUid[uid].push(eventName)
+  mapEventsToUid (uid, eventName) {
+    this[eventsMap][uid] = this[eventsMap][uid] || []
+    this[eventsMap][uid].push(eventName)
   }
   $on (eventName, callback, vm) {
-    if (!this.handles[eventName]) this.handles[eventName] = []
-    this.handles[eventName].push(callback)
-    if (vm instanceof this.Vue) this.setEventMapUid(vm._uid, eventName)
+    this[handleSymbol][eventName] = this[handleSymbol][eventName] || []
+    this[handleSymbol][eventName].push(callback)
+    if (vm instanceof this.Vue) this.mapEventsToUid(vm._uid, eventName)
   }
-  $emit () {
-    // console.log('EventBus emit eventName===', eventName)
-    let args = [...arguments]
-    let eventName = args[0]
-    let params = args.slice(1)
-    if (this.handles[eventName]) {
-      let len = this.handles[eventName].length
-      for (let i = 0; i < len; i++) {
-        this.handles[eventName][i](...params)
-      }
-    }
+  $emit (...args) {
+    const [eventName, ...params] = args
+    const eventHandlers = this[handleSymbol][eventName] || []
+    eventHandlers.forEach(fn => {
+      fn(...params)
+    })
   }
-  $offVmEvent (uid) {
-    let currentEvents = this.eventMapUid[uid] || []
+  $offByUid (uid) {
+    let currentEvents = this[eventsMap][uid] || []
     currentEvents.forEach(event => {
       this.$off(event)
     })
+    delete this[eventsMap][uid]
   }
   $off (eventName) {
-    delete this.handles[eventName]
+    delete this[handleSymbol][eventName]
   }
 }
-
 let $EventBus = {}
 
 $EventBus.install = (Vue, option) => {
   Vue.prototype.$eventBus = new EventBus(Vue)
   Vue.mixin({
     beforeDestroy () {
-      this.$eventBus.$offVmEvent(this._uid)
+      this.$eventBus.$offByUid(this._uid)
     }
   })
 }
