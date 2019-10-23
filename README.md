@@ -3,7 +3,6 @@
 ## 使用
 ```sh
  npm install dynamic-vue-bus
- 
 ```
 
  ```js
