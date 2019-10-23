@@ -1,7 +1,11 @@
 在Vue项目中使用EventBus拥有生命周期，不用再去手动销毁
 参考文章：[让在Vue中使用的EventBus也有生命周期](https://zhuanlan.zhihu.com/p/39537979)
 ## 使用
+```sh
  npm install dynamic-vue-bus
+ 
+```
+
  ```js
  import eventBus from 'dynamic-vue-bus'
  Vue.use(eventBus)
